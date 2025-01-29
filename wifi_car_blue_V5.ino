@@ -2,9 +2,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 // #include <ArduinoOTA.h>
-#include <Servo.h>
+// #include <Servo.h>
 
-Servo myservo;  // create servo object to control a servo
+// Servo myservo;  // create servo object to control a servo
 
 
 
@@ -46,7 +46,7 @@ void setup() {
   Serial.println("*WiFi Robot Remote Control Mode*");
   Serial.println("--------------------------------------");
 
-  myservo.attach(2, 600, 2000);  // attaches the servo on GIO2 to the servo object
+  // myservo.attach(2, 600, 2000);  // attaches the servo on GIO2 to the servo object
 
   pinMode(PWM_A, OUTPUT);
   pinMode(PWM_B, OUTPUT);
@@ -137,6 +137,8 @@ void handleJoystick()
     Serial.print(joystick_y);
     Serial.print(",Joystick Speed=");
     Serial.println(joystick_speed);
+    
+    move_with_joystick(); //move robot
   }
   
   else
@@ -330,21 +332,24 @@ void motor_dir(bool bIsForward, bool aIsForward)  //b is the left motor, a is ri
 }
 
 
-// void calculate_motor_speeds(int xMove, int yMove) {
+void move_with_joystick() {
 
-//   int v = (yMove / 100) * max_linear_speed;
-//   int omega = (xMove / 100) * max_angular_speed;
+  int xMove = joystick_x - 100; //joystick range is from 0-200 where 100,100 is center. we want to know the offset from center. here we get a range of -100 to 100
+  int yMove = joystick_y - 100; //y is the forward / backward component. here we get a range of -100 to 100
 
-//   Serial.println("v");
-//   Serial.println(v);
-//   Serial.println("omega");
-//   Serial.println(omega);
+  int v = (yMove / 100) * max_linear_speed;
+  int omega = (xMove / 100) * max_angular_speed;
 
-//   analogWrite(PWM_A, v - omega);  //right
-//   analogWrite(PWM_B, v + omega);  //left
+  Serial.println("v");
+  Serial.println(v);
+  Serial.println("omega");
+  Serial.println(omega);
 
-//   Serial.println("Right Speed");
-//   Serial.println(v - omega);
-//   Serial.println("Left Speed");
-//   Serial.println(v + omega);
-// }
+  analogWrite(PWM_A, v - omega);  //right
+  analogWrite(PWM_B, v + omega);  //left
+
+  Serial.println("Right Speed");
+  Serial.println(v - omega);
+  Serial.println("Left Speed");
+  Serial.println(v + omega);
+}
