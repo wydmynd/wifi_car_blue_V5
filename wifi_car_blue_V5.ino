@@ -14,7 +14,7 @@ const int DIR_B = 2;  // Left motor direction
 // Control parameters
 bool high_speed_mode = false;
 bool repeat_command = false;
-float SPEED = 130;  // Default speed (0-1023)
+float SPEED = 500;  // Default speed (0-1023)
 int speed_Coeff = 3;
 int max_linear_speed = 1000;
 int max_angular_speed = 500;
@@ -96,12 +96,12 @@ void handleState() {
     switch (command[0]) {
         case 'F': run_motors(SPEED, SPEED); break;  // Forward
         case 'B': run_motors(-SPEED, -SPEED); break;  // Backward
-        case 'R': run_motors(-SPEED, SPEED); break;  // Turn Right
-        case 'L': run_motors(SPEED, -SPEED); break;  // Turn Left
-        case 'G': run_motors(SPEED, SPEED/speed_Coeff); break;  // Forward Left
-        case 'H': run_motors(-SPEED, -SPEED/speed_Coeff); break;  // Backward Left
-        case 'I': run_motors(SPEED/speed_Coeff, SPEED); break;  // Forward Right
-        case 'J': run_motors(-SPEED/speed_Coeff, -SPEED); break;  // Backward Right
+        case 'L': run_motors(-SPEED, SPEED); break;  // Turn Left
+        case 'R': run_motors(SPEED, -SPEED); break;  // Turn Right
+        case 'I': run_motors(SPEED, SPEED/speed_Coeff); break;  // Forward Left
+        case 'J': run_motors(-SPEED, -SPEED/speed_Coeff); break;  // Backward Left
+        case 'G': run_motors(SPEED/speed_Coeff, SPEED); break;  // Forward Right
+        case 'H': run_motors(-SPEED/speed_Coeff, -SPEED); break;  // Backward Right
         case 'S': run_motors(0, 0); break;  // Stop
         case 'W': digitalWrite(LED_BUILTIN, LOW); break;  // Light On
         case 'w': digitalWrite(LED_BUILTIN, HIGH); break;  // Light Off
