@@ -103,10 +103,28 @@ void handleState() {
         case 'G': run_motors(SPEED/speed_Coeff, SPEED); break;  // Forward Right
         case 'H': run_motors(-SPEED/speed_Coeff, -SPEED); break;  // Backward Right
         case 'S': run_motors(0, 0); break;  // Stop
-        case 'W': digitalWrite(LED_BUILTIN, LOW); break;  // Light On
-        case 'w': digitalWrite(LED_BUILTIN, HIGH); break;  // Light Off
-        case 'V': Serial.println("horn"); break;  // Horn On
-        case 'v': Serial.println("stop horn"); break;  // Horn Off
+        case 'W': handleLight(true); break;  // Light On
+        case 'w': handleLight(false); break;  // Light Off
+        case 'V': handleHorn(true); break;  // Horn On
+        case 'v': handleHorn(false); break;  // Horn Off
+    }
+}
+
+void handleLight(bool status) {
+    if (status) {
+        //digitalWrite(LED_BUILTIN, LOW);  // Light On
+        Serial.println("Light On");
+    } else {
+        //digitalWrite(LED_BUILTIN, HIGH);  // Light Off
+        Serial.println("Light Off");
+    }
+}
+
+void handleHorn(bool status) {
+    if (status) {
+        Serial.println("Horn On");
+    } else {
+        Serial.println("Horn Off");
     }
 }
 
