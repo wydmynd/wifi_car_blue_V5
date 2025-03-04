@@ -2,8 +2,8 @@
 #include <ESP8266WebServer.h>
 
 const int JOYSTICK_RANGE = 100;
-const char *ssid = "WIFI_CAR_24";
-const char *password = "2456456456";
+const char *ssid = "WIFI_CAR_20";
+const char *password = "2012012012";
 
 // Motor pins
 const int PWM_A = 5;  // Right motor PWM
@@ -69,6 +69,10 @@ void setup() {
     WiFi.mode(WIFI_AP);
     WiFi.softAPConfig(ip, ip, netmask);
     WiFi.softAP(ssid, password);
+
+    //print debug info
+    Serial.print ("WiFi AP IP: ");
+    Serial.println(WiFi.softAPIP());
     
     // Setup web server routes
     server.on("/", HTTP_handleRoot);
