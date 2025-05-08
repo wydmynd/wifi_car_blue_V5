@@ -6,10 +6,10 @@ const char *ssid = "WIFI_CAR_20";
 const char *password = "2012012012";
 
 // Motor pins
-const int PWM_A = 5;  // Right motor PWM
-const int PWM_B = 4;  // Left motor PWM
-const int DIR_A = 0;  // Right motor direction
-const int DIR_B = 2;  // Left motor direction
+const int MOTOR_A1 = 5;  // Right motor PWM
+const int MOTOR_B1 = 4;  // Left motor PWM
+const int MOTOR_A2 = 0;  // Right motor direction
+const int MOTOR_B2 = 2;  // Left motor direction
 
 // Control parameters
 bool high_speed_mode = false;
@@ -36,13 +36,23 @@ void run_motors(int right_speed, int left_speed) {
     right_speed = constrain(right_speed, -1023, 1023);
     left_speed = constrain(left_speed, -1023, 1023);
     
-    // Set right motor direction and speed
-    digitalWrite(DIR_A, right_speed >= 0 ? HIGH : LOW);
-    analogWrite(PWM_A, abs(right_speed));
+    // Set right motor speeds (MX1508)
+    if (right_speed >= 0) {
+        analogWrite(MOTOR_A1, right_speed);    // Forward speed
+        analogWrite(MOTOR_A2, 0);              // No reverse
+    } else {
+        analogWrite(MOTOR_A1, 0);              // No forward
+        analogWrite(MOTOR_A2, -right_speed);    // Reverse speed
+    }
     
-    // Set left motor direction and speed
-    digitalWrite(DIR_B, left_speed >= 0 ? LOW : HIGH);
-    analogWrite(PWM_B, abs(left_speed));
+    // Set left motor speeds (MX1508)
+    if (left_speed >= 0) {
+        analogWrite(MOTOR_B1, left_speed);     // Forward speed
+        analogWrite(MOTOR_B2, 0);              // No reverse
+    } else {
+        analogWrite(MOTOR_B1, 0);              // No forward
+        analogWrite(MOTOR_B2, -left_speed);     // Reverse speed
+    }
     
     // Debug output
     Serial.print("Right Motor - Speed: ");
@@ -56,10 +66,10 @@ void setup() {
     Serial.println("*WiFi Robot Remote Control Mode*");
     
     // Initialize motor pins
-    pinMode(PWM_A, OUTPUT);
-    pinMode(PWM_B, OUTPUT);
-    pinMode(DIR_A, OUTPUT);
-    pinMode(DIR_B, OUTPUT);
+    pinMode(MOTOR_A1, OUTPUT);
+    pinMode(MOTOR_B1, OUTPUT);
+    pinMode(MOTOR_A2, OUTPUT);
+    pinMode(MOTOR_B2, OUTPUT);
     pinMode(LED_BUILTIN, OUTPUT);
     
     // Initial motor state
